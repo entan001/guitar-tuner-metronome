@@ -1,0 +1,358 @@
+<div class="music-tool-container">
+  <h2>簡易ギターチューナー ＆ メトロノーム</h2>
+  
+  <div class="section-title">ギター用開放弦チューナー (レギュラーチューニング)</div>
+  
+  <div class="guitar-head">
+    <div class="neck-line"></div>
+    <div class="peg-container left-pegs">
+      <button class="peg-btn" onclick="playTone(82.41, this)"><span>6E</span><small>82Hz</small></button>
+      <button class="peg-btn" onclick="playTone(110.00, this)"><span>5A</span><small>110Hz</small></button>
+      <button class="peg-btn" onclick="playTone(146.83, this)"><span>4D</span><small>147Hz</small></button>
+    </div>
+    <div class="head-wood">
+      <div class="logo">TUNER</div>
+    </div>
+    <div class="peg-container right-pegs">
+      <button class="peg-btn" onclick="playTone(196.00, this)"><span>3G</span><small>196Hz</small></button>
+      <button class="peg-btn" onclick="playTone(246.94, this)"><span>2B</span><small>247Hz</small></button>
+      <button class="peg-btn" onclick="playTone(329.63, this)"><span>1E</span><small>330Hz</small></button>
+    </div>
+  </div>
+
+  <hr class="tool-divider">
+
+  <div class="section-title">簡易メトロノーム</div>
+  <div class="metro-container">
+    <div class="bpm-display"><span id="bpm-value">120</span> <small>BPM</small></div>
+    
+    <div class="metro-visual">
+      <div id="indicator" class="indicator"></div>
+    </div>
+
+    <div class="control-row">
+      <input type="range" id="bpm-slider" min="40" max="240" value="120" oninput="updateBPM(this.value)">
+    </div>
+    
+    <button id="metro-toggle-btn" class="metro-btn" onclick="toggleMetronome()">START</button>
+  </div>
+</div>
+
+<style>
+/* ブログ埋め込み用ラッパー設定 */
+.music-tool-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 25px;
+  background: #1e2530;
+  color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  box-sizing: border-box;
+}
+.music-tool-container h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #e5a93c;
+  font-size: 1.5rem;
+}
+.section-title {
+  font-size: 0.9rem;
+  color: #a0aec0;
+  margin-bottom: 15px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.tool-divider {
+  border: 0;
+  border-top: 1px solid #2d3748;
+  margin: 30px 0;
+}
+
+/* ギターヘッドUIのスタイリング */
+.guitar-head {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 160px;
+  background: #141820;
+  border-radius: 8px;
+  padding: 10px;
+}
+.head-wood {
+  width: 140px;
+  height: 80px;
+  background: #8b5a2b;
+  border-radius: 6px;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  border: 2px solid #5c3a1a;
+}
+.logo {
+  color: rgba(255,255,255,0.2);
+  font-weight: bold;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+}
+.peg-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 130px;
+  z-index: 3;
+}
+.left-pegs { margin-right: -10px; }
+.right-pegs { margin-left: -10px; }
+
+.peg-btn {
+  background: #3a4454;
+  color: #fff;
+  border: 1px solid #4a5568;
+  border-radius: 20px;
+  padding: 6px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 65px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.peg-btn:hover {
+  background: #4a5568;
+}
+.peg-btn.active {
+  background: #e5a93c;
+  color: #1e2530;
+  border-color: #fff;
+  box-shadow: 0 0 10px #e5a93c;
+}
+.peg-btn span {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+.peg-btn small {
+  font-size: 0.65rem;
+  opacity: 0.8;
+}
+
+/* メトロノームUIのスタイリング */
+.metro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #141820;
+  padding: 20px;
+  border-radius: 8px;
+}
+.bpm-display {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #e5a93c;
+  margin-bottom: 10px;
+}
+.bpm-display small {
+  font-size: 1rem;
+  color: #fff;
+}
+.control-row {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 20px;
+}
+.control-row input[type=range] {
+  width: 100%;
+  accent-color: #e5a93c;
+  cursor: pointer;
+}
+.metro-visual {
+  width: 100%;
+  max-width: 300px;
+  height: 8px;
+  background: #2d3748;
+  border-radius: 4px;
+  margin-bottom: 25px;
+  position: relative;
+  overflow: hidden;
+}
+.indicator {
+  width: 20px;
+  height: 100%;
+  background: #e5a93c;
+  position: absolute;
+  left: 0;
+  border-radius: 4px;
+  transition: transform 0.1s ease-out;
+}
+.metro-btn {
+  background: #2b6cb0;
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: background 0.2s;
+  letter-spacing: 1px;
+}
+.metro-btn:hover { background: #3182ce; }
+.metro-btn.playing { background: #e53e3e; }
+</style>
+
+<script>
+// Web Audio APIの文脈を管理
+let audioCtx = null;
+let metroIntervalId = null;
+let isPlayingMetro = false;
+let bpm = 120;
+let currentActiveButton = null;
+let metroDirection = 1; // 1: 右移動, -1: 左移動
+
+// AudioContextの初期化（ブラウザのセキュリティ制限対策）
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+}
+
+// 1. チューナー機能：指定された周波数の音を鳴らす（サイン波）
+function playTone(frequency, button) {
+  initAudio();
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+
+  // すでにアクティブなボタンがあれば解除
+  if (currentActiveButton) {
+    currentActiveButton.classList.remove('active');
+  }
+
+  // 同じボタンが押されたら音を止める処理
+  if (currentActiveButton === button) {
+    currentActiveButton = null;
+    return; // 音は自然に減衰するか、新しく鳴らさないことで停止とみなす
+  }
+
+  button.classList.add('active');
+  currentActiveButton = button;
+
+  // オシレーター（発振器）とゲイン（音量）の設定
+  const osc = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+
+  // ギターの音に近い、少し温かみのある三角波（Triangle）を採用
+  osc.type = 'triangle'; 
+  osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+  // 音量の時間変化（フェードアウトさせて自然にする）
+  gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.0); // 3秒かけて消音
+
+  osc.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime + 3.0);
+
+  // 3秒後にボタンの点灯を自動消灯
+  setTimeout(() => {
+    if (currentActiveButton === button) {
+      button.classList.remove('active');
+      currentActiveButton = null;
+    }
+  }, 3000);
+}
+
+// 2. メトロノーム機能
+function updateBPM(val) {
+  bpm = val;
+  document.getElementById('bpm-value').innerText = val;
+  if (isPlayingMetro) {
+    // 再生中の場合はタイマーを再設定
+    stopMetronomeTimer();
+    startMetronomeTimer();
+  }
+}
+
+function toggleMetronome() {
+  initAudio();
+  const btn = document.getElementById('metro-toggle-btn');
+  
+  if (isPlayingMetro) {
+    stopMetronomeTimer();
+    btn.innerText = "START";
+    btn.classList.remove('playing');
+    isPlayingMetro = false;
+  } else {
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    startMetronomeTimer();
+    btn.innerText = "STOP";
+    btn.classList.add('playing');
+    isPlayingMetro = true;
+  }
+}
+
+function startMetronomeTimer() {
+  const interval = (60 / bpm) * 1000;
+  
+  // 初回の一発目を即座に鳴らす
+  playTick();
+  animateIndicator();
+
+  metroIntervalId = setInterval(() => {
+    playTick();
+    animateIndicator();
+  }, interval);
+}
+
+function stopMetronomeTimer() {
+  if (metroIntervalId) {
+    clearInterval(metroIntervalId);
+    metroIntervalId = null;
+  }
+  // インジケーターを左端に戻す
+  document.getElementById('indicator').style.transform = 'translateX(0px)';
+  metroDirection = 1;
+}
+
+// メトロノームの「カチッ」という音を作る
+function playTick() {
+  const osc = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(800, audioCtx.currentTime); // 高めのピピッという音
+
+  gainNode.gain.setValueAtTime(0.6, audioCtx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); // 0.05秒の短い音
+
+  osc.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.05);
+}
+
+// インジケーターを左右に振るアニメーション
+function animateIndicator() {
+  const indicator = document.getElementById('indicator');
+  if (metroDirection === 1) {
+    indicator.style.transform = 'translateX(280px)'; // 右端へ
+    metroDirection = -1;
+  } else {
+    indicator.style.transform = 'translateX(0px)'; // 左端へ
+    metroDirection = 1;
+  }
+}
+</script>
