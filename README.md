@@ -14,10 +14,10 @@
 
 このツールの使い方や、さらに詳しい音楽関連のコンテンツについては、私のブログで詳しく解説しています。ぜひ合わせてご覧ください！
 
-👉 [ひろぶろＤＪミュージック]([https://music.net-meme.com/archives/55786325.html]))
+👉[ひろぶろDJミュージック](https://music.net-meme.com/archives/55786325.html)
 
 ---
 
 ## 🎮 公開サイト
-👉 [ジェネレータで遊ぶ](https://entan001.github.io/今回のリポジトリ名/)
+👉[ジェネレータで遊ぶ](https://entan001.github.io/guitar-tuner-metronome/)
 *(※「今回のリポジトリ名」の部分をご自身の実際のリポジトリ名に書き換えてください)*
