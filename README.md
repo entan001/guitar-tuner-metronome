@@ -14,7 +14,7 @@
 
 このツールの使い方や、さらに詳しい音楽関連のコンテンツについては、私のブログで詳しく解説しています。ぜひ合わせてご覧ください！
 
-👉 [ひろぶろＤＪミュージック]([https://music.net-meme.com/](https://music.net-meme.com/archives/55786325.html))
+👉 [ひろぶろＤＪミュージック]([https://music.net-meme.com/archives/55786325.html]))
 
 ---
 
