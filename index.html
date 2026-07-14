@@ -22,6 +22,11 @@
 
   <hr class="tool-divider">
 
+  <!-- 真ん中辺りへのブログリンク挿入箇所 -->
+  <p style="text-align: center; margin-top: 15px; margin-bottom: 25px; font-size: 0.9em;">
+    このツールの詳しい解説：<a href="https://music.net-meme.com/" target="_blank" style="color: #2ecc71; text-decoration: underline;">ひろぶろＤＪミュージック</a>
+  </p>
+
   <div class="section-title">簡易メトロノーム</div>
   <div class="metro-container">
     <div class="bpm-display"><span id="bpm-value">120</span> <small>BPM</small></div>
@@ -69,7 +74,7 @@
 .tool-divider {
   border: 0;
   border-top: 1px solid #2d3748;
-  margin: 30px 0;
+  margin: 30px 0 15px 0; /* 下マージンを少し調整しました */
 }
 
 /* ギターヘッドUIのスタイリング */
@@ -239,23 +244,20 @@ function playTone(frequency, button) {
   // 同じボタンが押されたら音を止める処理
   if (currentActiveButton === button) {
     currentActiveButton = null;
-    return; // 音は自然に減衰するか、新しく鳴らさないことで停止とみなす
+    return;
   }
 
   button.classList.add('active');
   currentActiveButton = button;
 
-  // オシレーター（発振器）とゲイン（音量）の設定
   const osc = audioCtx.createOscillator();
   const gainNode = audioCtx.createGain();
 
-  // ギターの音に近い、少し温かみのある三角波（Triangle）を採用
   osc.type = 'triangle'; 
   osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
 
-  // 音量の時間変化（フェードアウトさせて自然にする）
   gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
-  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.0); // 3秒かけて消音
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.0);
 
   osc.connect(gainNode);
   gainNode.connect(audioCtx.destination);
@@ -263,7 +265,6 @@ function playTone(frequency, button) {
   osc.start();
   osc.stop(audioCtx.currentTime + 3.0);
 
-  // 3秒後にボタンの点灯を自動消灯
   setTimeout(() => {
     if (currentActiveButton === button) {
       button.classList.remove('active');
@@ -277,7 +278,6 @@ function updateBPM(val) {
   bpm = val;
   document.getElementById('bpm-value').innerText = val;
   if (isPlayingMetro) {
-    // 再生中の場合はタイマーを再設定
     stopMetronomeTimer();
     startMetronomeTimer();
   }
@@ -306,7 +306,6 @@ function toggleMetronome() {
 function startMetronomeTimer() {
   const interval = (60 / bpm) * 1000;
   
-  // 初回の一発目を即座に鳴らす
   playTick();
   animateIndicator();
 
@@ -321,21 +320,19 @@ function stopMetronomeTimer() {
     clearInterval(metroIntervalId);
     metroIntervalId = null;
   }
-  // インジケーターを左端に戻す
   document.getElementById('indicator').style.transform = 'translateX(0px)';
   metroDirection = 1;
 }
 
-// メトロノームの「カチッ」という音を作る
 function playTick() {
   const osc = audioCtx.createOscillator();
   const gainNode = audioCtx.createGain();
 
   osc.type = 'sine';
-  osc.frequency.setValueAtTime(800, audioCtx.currentTime); // 高めのピピッという音
+  osc.frequency.setValueAtTime(800, audioCtx.currentTime);
 
   gainNode.gain.setValueAtTime(0.6, audioCtx.currentTime);
-  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); // 0.05秒の短い音
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
 
   osc.connect(gainNode);
   gainNode.connect(audioCtx.destination);
@@ -344,14 +341,13 @@ function playTick() {
   osc.stop(audioCtx.currentTime + 0.05);
 }
 
-// インジケーターを左右に振るアニメーション
 function animateIndicator() {
   const indicator = document.getElementById('indicator');
   if (metroDirection === 1) {
-    indicator.style.transform = 'translateX(280px)'; // 右端へ
+    indicator.style.transform = 'translateX(280px)';
     metroDirection = -1;
   } else {
-    indicator.style.transform = 'translateX(0px)'; // 左端へ
+    indicator.style.transform = 'translateX(0px)';
     metroDirection = 1;
   }
 }
